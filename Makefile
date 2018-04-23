@@ -31,11 +31,10 @@ backup:
 	@make clean
 	@mkdir -p ~/backups; chmod 700 ~/backups
 	@$(eval CURDIRNAME := $(shell basename "`pwd`"))
-	@$(eval MKBKUPNAME := ~/backups/$(PROJECTNAME)-$(shell date + '%Y.%m.%d-%H:%M:%S').tar.gz)
+	@$(eval MKBKUPNAME := ~/backups/$(PROJECTNAME)-$(shell date +'%Y.%m.%d-%H:%M:%S').tar.gz)
 	@echo
 	@echo Writing Backup file to: $(MKBKUPNAME)
 	@echo
-	@-tar zcfv $(MKBKUPNAME) ../$(CURDIRNAME) 2> /dev/null
+	@-tar zcfv $(MKBKUPNAME) ../$(CURDIRNAME) --exclude='.[^/]*' 2> /dev/null
 	@chmod 600 $(MKBKUPNAME)
-	@echo
 	@echo Done!
