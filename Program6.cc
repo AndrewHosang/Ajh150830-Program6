@@ -1,22 +1,42 @@
 /*
- * Usage of CDK Matrix
- *
- * File:   example1.cc
- * Author: Stephen Perkins
- * Email:  stephen.perkins@utdallas.edu
+ * Andrew Hosang
+ * ajh150830@utdallas.edu
+ * CS 3377.501
+ * Program 6
  */
 
 #include <iostream>
+#include <sstream>
+#include <fstream>
+#include <iomanip>
+#include <stdint.h>
+#include <string>
 #include "cdk.h"
 
 
-#define MATRIX_WIDTH 5
-#define MATRIX_HEIGHT 3
-#define BOX_WIDTH 15
+#define MATRIX_WIDTH 3
+#define MATRIX_HEIGHT 5
+#define BOX_WIDTH 30
 #define MATRIX_NAME_STRING "Test Matrix"
 
 using namespace std;
 
+const int maxRecordStringLength = 25;
+
+class BinaryFileHeader
+{
+public:
+  uint32_t magicNumber; /* Should be 0xFEEDFACE */
+  uint32_t versionNumber;
+  uint64_t numRecords;
+};
+
+class BinaryFileRecord
+{
+public:
+  uint8_t strLength;
+  char stringBuffer[maxRecordStringLength];
+};
 
 int main()
 {
@@ -64,11 +84,25 @@ int main()
 
   /* Display the Matrix */
   drawCDKMatrix(myMatrix, true);
+  
+  BinaryFileHeader *myHeader = new BinaryFileHeader();
+  //  BinaryFileRecord *myRecord = new BinaryFileRecord();
+
+  ifstream binInfile ("cs3377.bin", ios::in | ios::binary);
+
+  binInfile.read((char *) myHeader, sizeof(BinaryFileHeader));
+
+  stringstream stream;
+  stream << "0x" << hex << (int)myHeader->magicNumber;
+
+  string magic = "Magic: " + stream.str();
+
+  setCDKMatrixCell(myMatrix, 1, 1, magic.c_str());
 
   /*
    * Dipslay a message
    */
-  setCDKMatrixCell(myMatrix, 1, 1, "Hello World");
+  //  setCDKMatrixCell(myMatrix, 1, 1, "Hello World");
   drawCDKMatrix(myMatrix, true);    /* required  */
 
   /* So we can see results, pause until a key is pressed. */
@@ -77,4 +111,23 @@ int main()
 
   // Cleanup screen
   endCDK();
+
+
+  /*
+  cout << myHeader->magicNumber << endl;
+  cout << myHeader->versionNumber << endl;
+  cout << myHeader->numRecords << endl;
+  cout << endl;
+
+  for(int x=0;x<(int)myHeader->numRecords;x++)
+    {
+      binInfile.read((char *) myRecord, sizeof(BinaryFileRecord));  
+      cout << "Strlen: " << (int)myRecord->strLength << endl;
+      cout << myRecord->stringBuffer << endl;
+      cout << endl;
+    }
+  */
+
+  binInfile.close();
+
 }
