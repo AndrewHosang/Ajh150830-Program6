@@ -14,7 +14,7 @@ LDLIBS = -lcdk -lcurses
 
 PROJECTNAME = ajh150830.CS3377.Program6
 
-EXECFILE = prog6
+EXECFILE = Prog6
 
 OBJS = Program6.o
 
