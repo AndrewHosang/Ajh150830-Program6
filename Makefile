@@ -1,5 +1,6 @@
 # Andrew Hosang
 # ajh150830@utdallas.edu
+# CS 3377.501
 # Program 6
 
 CXX = g++
@@ -8,10 +9,9 @@ CPPFLAGS = -I/scratch/perkins/include
 LDFLAGS = -L/scratch/perkins/lib
 LDLIBS = -lcdk -lcurses 
 
-
-#
 # PROJECTNAME is a descriptive name used for the backup target
 # This should not contain spaces or special characters
+
 PROJECTNAME = ajh150830.CS3377.Program6
 
 EXECFILE = prog6
