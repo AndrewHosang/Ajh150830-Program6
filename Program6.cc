@@ -5,6 +5,7 @@
  * Program 6
  */
 
+#include <algorithm>
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -76,7 +77,7 @@ int main()
 			  MATRIX_NAME_STRING, (char **) rowTitles, (char **) columnTitles, boxWidths,
 				     boxTypes, 1, 1, ' ', ROW, true, true, false);
 
-  if (myMatrix ==NULL)
+  if (myMatrix == NULL)
     {
       printf("Error creating Matrix\n");
       _exit(1);
@@ -86,23 +87,41 @@ int main()
   drawCDKMatrix(myMatrix, true);
   
   BinaryFileHeader *myHeader = new BinaryFileHeader();
-  //  BinaryFileRecord *myRecord = new BinaryFileRecord();
+  BinaryFileRecord *myRecord = new BinaryFileRecord();
 
   ifstream binInfile ("cs3377.bin", ios::in | ios::binary);
 
   binInfile.read((char *) myHeader, sizeof(BinaryFileHeader));
 
   stringstream stream;
-  stream << "0x" << hex << (int)myHeader->magicNumber;
+  stream << hex << (int)myHeader->magicNumber;
 
-  string magic = "Magic: " + stream.str();
+  string header = stream.str();
+  transform(header.begin(), header.end(), header.begin(), ::toupper);
+  header = "Magic: 0x" + header;
+  setCDKMatrixCell(myMatrix, 1, 1, header.c_str());
 
-  setCDKMatrixCell(myMatrix, 1, 1, magic.c_str());
+  stream.str("");
+  stream << (int)myHeader->versionNumber;
+  header = "Version: " + stream.str();
+  setCDKMatrixCell(myMatrix, 1, 2, header.c_str());
 
-  /*
-   * Dipslay a message
-   */
-  //  setCDKMatrixCell(myMatrix, 1, 1, "Hello World");
+  stream.str("");
+  stream << (int)myHeader->numRecords;
+  header = "NumRecords: " + stream.str();
+  setCDKMatrixCell(myMatrix, 1, 3, header.c_str());
+
+  string record;
+  for(int x=0;x<(int)myHeader->numRecords;x++)
+    {
+      binInfile.read((char *) myRecord, sizeof(BinaryFileRecord));
+      stream.str("");
+      stream << dec << (int)myRecord->strLength;
+      record = "strlen: " + stream.str();
+      setCDKMatrixCell(myMatrix, (2+x), 1, record.c_str());
+      setCDKMatrixCell(myMatrix, (2+x), 2, myRecord->stringBuffer);
+    }
+
   drawCDKMatrix(myMatrix, true);    /* required  */
 
   /* So we can see results, pause until a key is pressed. */
@@ -112,22 +131,5 @@ int main()
   // Cleanup screen
   endCDK();
 
-
-  /*
-  cout << myHeader->magicNumber << endl;
-  cout << myHeader->versionNumber << endl;
-  cout << myHeader->numRecords << endl;
-  cout << endl;
-
-  for(int x=0;x<(int)myHeader->numRecords;x++)
-    {
-      binInfile.read((char *) myRecord, sizeof(BinaryFileRecord));  
-      cout << "Strlen: " << (int)myRecord->strLength << endl;
-      cout << myRecord->stringBuffer << endl;
-      cout << endl;
-    }
-  */
-
   binInfile.close();
-
 }
