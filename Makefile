@@ -14,7 +14,7 @@ LDLIBS = -lcdk -lcurses
 # This should not contain spaces or special characters
 PROJECTNAME = ajh150830.CS3377.Program6
 
-EXECFILE = prog6
+EXECFILE = Prog6
 
 OBJS = Program6.o
 

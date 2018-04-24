@@ -17,8 +17,8 @@
 
 #define MATRIX_WIDTH 3
 #define MATRIX_HEIGHT 5
-#define BOX_WIDTH 30
-#define MATRIX_NAME_STRING "Test Matrix"
+#define BOX_WIDTH 20
+#define MATRIX_NAME_STRING "Binary File Contents"
 
 using namespace std;
 
@@ -54,8 +54,8 @@ int main()
   // values you choose to set for MATRIX_WIDTH and MATRIX_HEIGHT
   // above.
 
-  const char 		*rowTitles[] = {"R0", "R1", "R2", "R3", "R4", "R5"};
-  const char 		*columnTitles[] = {"C0", "C1", "C2", "C3", "C4", "C5"};
+  const char 		*rowTitles[] = {"R0", "a", "b", "c", "d", "e", "f"};
+  const char 		*columnTitles[] = {"C0", "a", "b", "c", "d", "e", "f"};
   int		boxWidths[] = {BOX_WIDTH, BOX_WIDTH, BOX_WIDTH, BOX_WIDTH, BOX_WIDTH, BOX_WIDTH};
   int		boxTypes[] = {vMIXED, vMIXED, vMIXED, vMIXED,  vMIXED,  vMIXED};
 
